@@ -48,7 +48,8 @@ shinyUI(
         tabPanel("Distribution Plots", 
           sidebarLayout(
             sidebarPanel(
-              radioButtons("var", "Variables:",varListMinS)
+              radioButtons("var", "Variables:",varListMinS),
+              checkboxInput('kde', 'Show Density')
             ),
             
             # Show a tabset that includes a plot, summary, and table view
