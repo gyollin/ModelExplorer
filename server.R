@@ -9,15 +9,29 @@ library(shiny)
 
 shinyServer(function(input, output) {
 
-  output$distPlot <- renderPlot({
-
-    # generate bins based on input$bins from ui.R
-    x    <- faithful[, 2]
-    bins <- seq(min(x), max(x), length.out = input$bins + 1)
-
-    # draw the histogram with the specified number of bins
-    hist(x, breaks = bins, col = 'darkgray', border = 'white')
-
+  
+  # summary table of data
+  output$values <- renderTable({ df }, include.rownames=FALSE)
+  
+  # Generate model summaries
+  output$BestModSum <- renderPrint({ summary(best.model) })
+  output$BetterModSum <- renderPrint({ summary(better.model) })
+  output$BaselineModSum <- renderPrint({ summary(base.model) })
+  
+  # explore data
+  output$DataSum <- renderPrint({ summary(dat[,input$var]) })
+  output$DataPlot <- renderPlot({
+    x <- dat[,input$var]
+    if( class(x)=="factor" ) {
+      plot(x,ylab="count",main=input$var)
+    } else {
+      hist(x,ylab="count",xlab="",main=input$var)
+    }
   })
-
+  output$ScatterPlot <- renderPlot({
+    x <- dat[,input$var1]
+    y <- dat[,input$var2]
+    plot(x=x,y=y,xlab=input$var1,ylab=input$var2)
+  })
+  
 })
