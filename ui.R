@@ -21,10 +21,35 @@ shinyUI(
       h2("Data"),
       p("The dataset used for the Model Explorer is a hypothetical but 
         realistic set of about 100,000 records of annuity contracts"),
-      tableOutput("values")
+      tableOutput("values"),
+      br(),
+      HTML("Created by G. Yollin and E. Burns. ","&#169;", "2016 Milliman. All rights reserved.")
       ),
     tabPanel(title = "Explore Results",
-      h2("place results stuff here")
+      tabsetPanel(type = "tabs", 
+        tabPanel("A/E Analysis", 
+          sidebarLayout(
+            sidebarPanel(
+              radioButtons("AEvar", "Variables:",varList,selected="q"),
+              radioButtons("AEmodel", "Models:",ModelList),
+              checkboxInput('AEcheck', 'Actual and Expected')
+              ),
+              mainPanel(
+                plotOutput("AEPlot")
+              )
+            )
+          ), 
+        tabPanel("Lift Plots", 
+          sidebarLayout(
+            sidebarPanel(
+              h4("side bar")
+            ),
+            mainPanel(
+              h4("main panel")
+            )
+          )
+        ) 
+      )
     ),
     tabPanel(title = "Explore Model",
       navlistPanel(

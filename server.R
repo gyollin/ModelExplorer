@@ -7,6 +7,7 @@
 
 library(shiny)
 library(ggplot2)
+library(dplyr)
 
 max.col  <- 255
 green    <- rgb(142,167,128, maxColorValue = max.col)
@@ -29,7 +30,7 @@ shinyServer(function(input, output) {
   
   # explore data
   output$DataSum <- renderPrint({ summary(dat[,input$var]) })
-  output$DataPlot<-renderPlot({
+  output$DataPlot <- renderPlot({
     
     x        <- dat[,input$var]
     x.class  <- class(x)
@@ -75,5 +76,16 @@ shinyServer(function(input, output) {
     y <- dat[,input$var2]
     plot(x=x,y=y,xlab=input$var1,ylab=input$var2)
   })
-  
+
+  # AE Plot  
+  output$AEPlot <- renderPlot({
+    mod <- switch(which(input$AEmodel == ModelList),"best.model","better.model","base.model")
+    AandE <- ifelse(input$AEcheck,"TRUE","FALSE")
+    print(input$AEcheck)
+    AEPlot(get(mod), 
+      data.hld = testing,
+      xvar = input$AEvar, 
+      AandE = AandE)
+  })
+
 })
