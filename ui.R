@@ -69,6 +69,26 @@ shinyUI(
         )
       )
     ),
+    tabPanel(title = "Predict",
+      sidebarLayout(
+        sidebarPanel(
+          radioButtons("PredSCPeriod", "Surrender charge period:",
+            c("4 years"=4, "7 years"=7),selected="7"),
+          radioButtons("PredRiderCode", "Rider code:",
+            c("A", "B","C"),selected="C"),
+          numericInput(inputId="PredAge", label="Policy owner age:", value=65, min = 18, max = 75),
+          numericInput(inputId="Predq", label="Policy duration in quarters:", value=14, min = 1, max = 48),
+          numericInput(inputId="PredBB", label="Benefit base:", 
+            min = 1000, max = 10000000, value = 100000, step = 1000),
+          numericInput(inputId="PredAV", label="Account value:", 
+            min = 1000, max = 4000000, value = 100000, step = 1000)
+        ),
+        mainPanel(
+          tableOutput("PredDf"),
+          plotOutput("PredBarplot")
+        )
+      )
+    ),
     tabPanel(title = "Explore Data",
       tabsetPanel(type = "tabs", 
         tabPanel("Distribution Plots", 

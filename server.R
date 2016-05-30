@@ -93,5 +93,36 @@ shinyServer(function(input, output) {
     mod2 <- switch(which(input$LiftModel2 == ModelList),"best.model","better.model","base.model")
     TwoWay(get(mod1),get(mod2),data=testing,n=20) 
   })
+
+  # predict
+  data <- reactive({
+    PredSCPeriod <- as.numeric(input$PredSCPeriod)
+    mydf <- data.frame(
+      SCPeriod = factor(input$PredSCPeriod,levels=c("4","7")),
+      SCPhase = factor(ifelse(input$Predq < PredSCPeriod*4,"IN",
+        ifelse(input$Predq > PredSCPeriod*4,"OUT","END")),
+        levels = c("END","IN","OUT")),
+      q = input$Predq,
+      ITM = input$PredBB/input$PredAV,
+      BB = log(input$PredBB),
+      Age = input$PredAge,
+      AV = log(input$PredAV),
+      RiderCode = factor(input$PredRiderCode,levels=c("A","B","C"))
+    )
+    pred.best <- predict(best.model,newdata=mydf,type="response",se.fit=TRUE)
+    pred.better <- predict(better.model,newdata=mydf,type="response",se.fit=TRUE)
+    pred.base <- predict(base.model,newdata=mydf,type="response",se.fit=TRUE)
+    pred <- data.frame(
+      Model=ModelList,
+      Probability=c(pred.best$fit,pred.better$fit,pred.base$fit),
+      "Standard Error"=c(pred.best$se.fit,pred.better$se.fit,pred.base$se.fit)
+    )
+  })
+  output$PredDf <- renderTable({
+    data()
+  },include.rownames=FALSE)
+  output$PredBarplot <- renderPlot({
+    barplot(height=data()[,"Probability"],names.arg=data()[,"Model"])
+  })
   
 })
