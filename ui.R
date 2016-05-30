@@ -42,10 +42,11 @@ shinyUI(
         tabPanel("Lift Plots", 
           sidebarLayout(
             sidebarPanel(
-              h4("side bar")
+              radioButtons("LiftModell", "1st Model:",ModelList,selected="Baseline Model"),
+              radioButtons("LiftModel2", "2nd Model:",ModelList)
             ),
             mainPanel(
-              h4("main panel")
+              plotOutput("LiftPlot")
             )
           )
         ) 

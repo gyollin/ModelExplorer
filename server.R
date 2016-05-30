@@ -81,11 +81,17 @@ shinyServer(function(input, output) {
   output$AEPlot <- renderPlot({
     mod <- switch(which(input$AEmodel == ModelList),"best.model","better.model","base.model")
     AandE <- ifelse(input$AEcheck,"TRUE","FALSE")
-    print(input$AEcheck)
-    AEPlot(get(mod), 
+     AEPlot(get(mod), 
       data.hld = testing,
       xvar = input$AEvar, 
       AandE = AandE)
   })
 
+  # Two Way Lift Plot  
+  output$LiftPlot <- renderPlot({
+    mod1 <- switch(which(input$LiftModell == ModelList),"best.model","better.model","base.model")
+    mod2 <- switch(which(input$LiftModel2 == ModelList),"best.model","better.model","base.model")
+    TwoWay(get(mod1),get(mod2),data=testing,n=20) 
+  })
+  
 })
