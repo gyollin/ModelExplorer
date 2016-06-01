@@ -1,4 +1,10 @@
+library(shiny)
+library(ggplot2)
+library(dplyr)
+library(DT)
+
 load("ModelExplorer.RData")
 source("AEPlot.R", local = TRUE)
 source("TwoWay.R", local = TRUE)
+source("ModelOutputTable_tempInter.R", local = TRUE)
 ModelList <- c("Full Model with Interactions","Model without Interactions","Baseline Model")

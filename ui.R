@@ -56,16 +56,16 @@ shinyUI(
       navlistPanel(
         "Model Hierarchy",
         tabPanel("Best model (includes interactions)",
-          h4("Best GLM Model"),
-          verbatimTextOutput("BestModSum")
+          plotOutput("BestTornado"),
+          DT::dataTableOutput("BestModSum")
         ),
         tabPanel("Best model without interactions",
-          h4("Best GLM Model without interactions"),
-          verbatimTextOutput("BetterModSum")
+          plotOutput("BetterTornado"),
+          DT::dataTableOutput("BetterModSum")
         ),
         tabPanel("Baseline model",
-          h4("Baseline Model"),
-          verbatimTextOutput("BaselineModSum")
+          plotOutput("BaseTornado"),
+          DT::dataTableOutput("BaseModSum")
         )
       )
     ),

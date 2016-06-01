@@ -5,10 +5,6 @@
 # http://shiny.rstudio.com
 #
 
-library(shiny)
-library(ggplot2)
-library(dplyr)
-
 max.col  <- 255
 green    <- rgb(142,167,128, maxColorValue = max.col)
 green.a  <- rgb(142,167,128,50, maxColorValue = max.col)
@@ -35,11 +31,6 @@ shinyServer(function(input, output) {
   
   # summary table of data
   output$values <- renderTable({ df }, include.rownames=FALSE)
-  
-  # Generate model summaries
-  output$BestModSum <- renderPrint({ summary(best.model) })
-  output$BetterModSum <- renderPrint({ summary(better.model) })
-  output$BaselineModSum <- renderPrint({ summary(base.model) })
   
   # explore data
   output$DataSum <- renderPrint({ summary(dat[,input$var]) })
@@ -131,6 +122,72 @@ shinyServer(function(input, output) {
       "Standard Error"=c(pred.best$se.fit,pred.better$se.fit,pred.base$se.fit)
     )
   })
+  
+  # tornado plot
+  output$BestTornado <- renderPlot({
+  temp.table <- ModelOutputTable_temp(best.model)
+  temp.table <- mutate(temp.table,
+    bar= Multiplicative * Direction)
+  temp.table <- na.omit(temp.table)
+  x.lim <- max(temp.table$bar)
+  x.lab <- pmin(temp.table$Multiplicative, 4) * temp.table$Direction
+  x.pos <- temp.table$Direction + 3
+  n <- nrow(temp.table)
+  y <- barplot(temp.table$bar[n:1], horiz = TRUE, 
+    xlim = sort(c(-x.lim, x.lim)), col = "cornflowerblue",
+    main = "Relative importance of predictors")
+  text(x=0, y=y, rev(temp.table$Variable), pos = rev(-temp.table$Direction+3))
+  par(new=TRUE)
+  barplot(temp.table$Direction[n:1], horiz = TRUE, 
+    xlim = sort(c(-x.lim, x.lim)), col = "gray",
+    main = "")
+  })
+  output$BetterTornado <- renderPlot({
+    temp.table <- ModelOutputTable_temp(better.model)
+    temp.table <- mutate(temp.table,
+      bar= Multiplicative * Direction)
+    temp.table <- na.omit(temp.table)
+    x.lim <- max(temp.table$bar)
+    x.lab <- pmin(temp.table$Multiplicative, 4) * temp.table$Direction
+    x.pos <- temp.table$Direction + 3
+    n <- nrow(temp.table)
+    y <- barplot(temp.table$bar[n:1], horiz = TRUE, 
+      xlim = sort(c(-x.lim, x.lim)), col = "cornflowerblue",
+      main = "Relative importance of predictors")
+    text(x=0, y=y, rev(temp.table$Variable), pos = rev(-temp.table$Direction+3))
+    par(new=TRUE)
+    barplot(temp.table$Direction[n:1], horiz = TRUE, 
+      xlim = sort(c(-x.lim, x.lim)), col = "gray",
+      main = "")
+  })
+  output$BaseTornado <- renderPlot({
+    temp.table <- ModelOutputTable_temp(base.model)
+    temp.table <- mutate(temp.table,
+      bar= Multiplicative * Direction)
+    temp.table <- na.omit(temp.table)
+    x.lim <- max(temp.table$bar)
+    x.lab <- pmin(temp.table$Multiplicative, 4) * temp.table$Direction
+    x.pos <- temp.table$Direction + 3
+    n <- nrow(temp.table)
+    y <- barplot(temp.table$bar[n:1], horiz = TRUE, 
+      xlim = sort(c(-x.lim, x.lim)), col = "cornflowerblue",
+      main = "Relative importance of predictors")
+    text(x=0, y=y, rev(temp.table$Variable), pos = rev(-temp.table$Direction+3))
+    par(new=TRUE)
+    barplot(temp.table$Direction[n:1], horiz = TRUE, 
+      xlim = sort(c(-x.lim, x.lim)), col = "gray",
+      main = "")
+  })
+  # Generate model summaries
+  ms.best <- round(coef(summary(best.model)),4)
+  ms.best <- data.frame(coefficients=rownames(ms.best),ms.best)
+  output$BestModSum <- renderDataTable({datatable(ms.best, options = list(dom = 't'),rownames= FALSE)})
+  ms.better <- round(coef(summary(better.model)),4)
+  ms.better <- data.frame(coefficients=rownames(ms.better),ms.better)
+  output$BetterModSum <- renderDataTable({datatable(ms.better, options = list(dom = 't'),rownames= FALSE)})
+  ms.base <- round(coef(summary(base.model)),4)
+  ms.base <- data.frame(coefficients=rownames(ms.base),ms.base)
+  output$BaseModSum <- renderDataTable({datatable(ms.base, options = list(dom = 't'),rownames= FALSE)})
   
   output$PredDf <- renderTable({
     data()
