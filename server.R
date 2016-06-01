@@ -18,7 +18,20 @@ slate    <- rgb(198,201,202, maxColorValue = max.col)
 cols     <- c(green, blue, charcoal, slate)
 
 shinyServer(function(input, output) {
+  
+  # update ui
+  updateUI<-function(var) {
+    show.density <- var %in% c('Surr','SCPeriod','SCPhase','RiderCode')
+    if(!show.density) {
+      renderUI({
+        checkboxInput('kde', 'Show Density')
+      })
+    } else {
+      renderUI({
 
+      })
+    }
+  }
   
   # summary table of data
   output$values <- renderTable({ df }, include.rownames=FALSE)
@@ -118,11 +131,16 @@ shinyServer(function(input, output) {
       "Standard Error"=c(pred.best$se.fit,pred.better$se.fit,pred.base$se.fit)
     )
   })
+  
   output$PredDf <- renderTable({
     data()
   },include.rownames=FALSE)
   output$PredBarplot <- renderPlot({
     barplot(height=data()[,"Probability"],names.arg=data()[,"Model"])
+  })
+  
+  observe({
+    output$show_density<-updateUI(input$var)
   })
   
 })
