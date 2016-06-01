@@ -18,9 +18,10 @@ shinyServer(function(input, output) {
   # update ui
   updateUI<-function(var) {
     show.density <- var %in% c('Surr','SCPeriod','SCPhase','RiderCode')
+    is.checked <- input$kde
     if(!show.density) {
       renderUI({
-        checkboxInput('kde', 'Show Density')
+        checkboxInput('kde', 'Show Density', is.checked)
       })
     } else {
       renderUI({
@@ -28,6 +29,10 @@ shinyServer(function(input, output) {
       })
     }
   }
+  
+  observe({
+    output$show_density<-updateUI(input$var)
+  })
   
   # summary table of data
   output$values <- renderTable({ df }, include.rownames=FALSE)
@@ -51,12 +56,18 @@ shinyServer(function(input, output) {
       
     } else {
       
+      custom.bin <- NULL
+      
+      if(input$var == 'q') {
+        custom.bin <- 1
+      }
+      
       if(input$kde) {
         
         x.levels = c(input$var, 'Density')
         x.cols <- setNames(c(blue, green), x.levels)
         
-        ggplot(x.df, aes(x, fill = input$var)) + geom_histogram(aes(y=..density..), color = slate) +
+        ggplot(x.df, aes(x, fill = input$var)) + geom_histogram(aes(y=..density..), color = slate, binwidth = custom.bin) +
           geom_density(color = slate, aes(fill = 'Density'), alpha = 0) +
           geom_density(color = green, fill = rgb (0,0,0,0), size = 1.2) +
           labs(title='', x=input$var, y='Density') + 
@@ -67,7 +78,7 @@ shinyServer(function(input, output) {
         x.levels = input$var
         x.cols <- setNames(blue, x.levels)
         
-        ggplot(x.df, aes(x, fill = input$var)) + geom_histogram(color = slate) +
+        ggplot(x.df, aes(x, fill = input$var)) + geom_histogram(color = slate, binwidth = custom.bin) +
           labs(title='', x=input$var, y='Count') + 
           scale_fill_manual(name='', values=x.cols)
       }
@@ -194,10 +205,6 @@ shinyServer(function(input, output) {
   },include.rownames=FALSE)
   output$PredBarplot <- renderPlot({
     barplot(height=data()[,"Probability"],names.arg=data()[,"Model"])
-  })
-  
-  observe({
-    output$show_density<-updateUI(input$var)
   })
   
 })
