@@ -95,7 +95,7 @@ shinyUI(
           sidebarLayout(
             sidebarPanel(
               radioButtons("var", "Variables:",varListMinS),
-              checkboxInput('kde', 'Show Density')
+              uiOutput("show_density")
             ),
             
             # Show a tabset that includes a plot, summary, and table view
