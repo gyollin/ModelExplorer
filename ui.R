@@ -9,7 +9,7 @@ library(shiny)
 
 shinyUI(
 
-  navbarPage(title = "Milliman",
+  navbarPage(title = strong("Milliman"),
     tabPanel(title = "Overview",
       h1("GLWB Lapse Model Explorer"),
       h2("Description"),
