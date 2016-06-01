@@ -22,9 +22,10 @@ shinyServer(function(input, output) {
   # update ui
   updateUI<-function(var) {
     show.density <- var %in% c('Surr','SCPeriod','SCPhase','RiderCode')
+    is.checked <- input$kde
     if(!show.density) {
       renderUI({
-        checkboxInput('kde', 'Show Density')
+        checkboxInput('kde', 'Show Density', is.checked)
       })
     } else {
       renderUI({
@@ -32,6 +33,10 @@ shinyServer(function(input, output) {
       })
     }
   }
+  
+  observe({
+    output$show_density<-updateUI(input$var)
+  })
   
   # summary table of data
   output$values <- renderTable({ df }, include.rownames=FALSE)
@@ -143,10 +148,6 @@ shinyServer(function(input, output) {
   },include.rownames=FALSE)
   output$PredBarplot <- renderPlot({
     barplot(height=data()[,"Probability"],names.arg=data()[,"Model"])
-  })
-  
-  observe({
-    output$show_density<-updateUI(input$var)
   })
   
 })
