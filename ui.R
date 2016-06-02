@@ -9,15 +9,13 @@ library(shiny)
 
 shinyUI(
 
-  navbarPage(title = strong("Milliman"),
+  navbarPage(title = "Milliman Preditive Model Explorer",
     tabPanel(title = "Overview",
       h1("GLWB Lapse Model Explorer"),
+      h2("Background"),
+      p("Compared with traditional actuarial experience studies, an analysis based on predictive modeling techniques can enhance your company’s understanding of policyholder behavior.  Additional insights can be discovered by exploring relationships with new data sources and interactions between variables."),
       h2("Description"),
-      p("This website presents a ",strong("Generalized Linear Model"),
-        "for predicting the probability that a policyholder of a", 
-        em("Variable Annuity"), " contract with a ",
-        em("Guaranteed Lifetime Withdrawal Benefit (GLWB)"),
-        " will surrender (lapse) their policy."),
+      p("This website presents a Generalized Linear Model for predicting the probability that a policyholder of a Variable Annuity contract with a Guaranteed Lifetime Withdrawal Benefit (GLWB) will surrender his or her policy."),
       h2("Data"),
       p("The dataset used for the Model Explorer is a hypothetical but 
         realistic set of about 100,000 records of annuity contracts"),
@@ -31,7 +29,8 @@ shinyUI(
           sidebarLayout(
             sidebarPanel(
               radioButtons("var", "Variables:",varListMinS),
-              uiOutput("show_density")
+              uiOutput("show_density"),
+              helpText("Click on a variable to see its distribution.")
             ),
             
             # Show a tabset that includes a plot, summary, and table view
@@ -48,7 +47,8 @@ shinyUI(
           sidebarLayout(
             sidebarPanel(
               selectInput("var1", "X-axis:",varListMinS),
-              selectInput("var2", "Y-axis:",varListMinS,selected="ITM")
+              selectInput("var2", "Y-axis:",varListMinS,selected="ITM"),
+              helpText("Chose two variables to explore their relationship to each other.")
             ),
             
             # Show a tabset that includes a plot, summary, and table view
@@ -64,7 +64,7 @@ shinyUI(
     tabPanel(title = "Explore Models",
       navlistPanel(
         "Model Hierarchy",
-        tabPanel("Best model (includes interactions)",
+         tabPanel("Best model (includes interactions)",
           plotOutput("BestTornado"),
           DT::dataTableOutput("BestModSum")
         ),
