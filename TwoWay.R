@@ -36,8 +36,10 @@ TwoWay <- function(model1 = NULL, model2= NULL, data = NULL, n = 10){
   abline(h=1)
 
   lines(AE$AE.1, col = "red", lwd = 1)
+  points(AE$AE.1, col = "red")
   lines(AE$AE.2, col = "blue", lwd = 1)
-
+  points(AE$AE.2, col = "blue")
+  legend(x="top",legend=c("Model 1","Model 2"),col=c("red","blue"), lty=1,bty="n")
 }
 
 

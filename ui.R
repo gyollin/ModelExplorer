@@ -25,70 +25,6 @@ shinyUI(
       br(),
       HTML("Created by G. Yollin and E. Burns. ","&#169;", "2016 Milliman. All rights reserved.")
       ),
-    tabPanel(title = "Explore Results",
-      tabsetPanel(type = "tabs", 
-        tabPanel("A/E Analysis", 
-          sidebarLayout(
-            sidebarPanel(
-              radioButtons("AEvar", "Variables:",varList,selected="q"),
-              radioButtons("AEmodel", "Models:",ModelList),
-              checkboxInput('AEcheck', 'Actual and Expected')
-              ),
-              mainPanel(
-                plotOutput("AEPlot")
-              )
-            )
-          ), 
-        tabPanel("Lift Plots", 
-          sidebarLayout(
-            sidebarPanel(
-              radioButtons("LiftModell", "1st Model:",ModelList,selected="Baseline Model"),
-              radioButtons("LiftModel2", "2nd Model:",ModelList)
-            ),
-            mainPanel(
-              plotOutput("LiftPlot")
-            )
-          )
-        ) 
-      )
-    ),
-    tabPanel(title = "Explore Model",
-      navlistPanel(
-        "Model Hierarchy",
-        tabPanel("Best model (includes interactions)",
-          plotOutput("BestTornado"),
-          DT::dataTableOutput("BestModSum")
-        ),
-        tabPanel("Best model without interactions",
-          plotOutput("BetterTornado"),
-          DT::dataTableOutput("BetterModSum")
-        ),
-        tabPanel("Baseline model",
-          plotOutput("BaseTornado"),
-          DT::dataTableOutput("BaseModSum")
-        )
-      )
-    ),
-    tabPanel(title = "Predict",
-      sidebarLayout(
-        sidebarPanel(
-          radioButtons("PredSCPeriod", "Surrender charge period:",
-            c("4 years"=4, "7 years"=7),selected="7"),
-          radioButtons("PredRiderCode", "Rider code:",
-            c("A", "B","C"),selected="C"),
-          numericInput(inputId="PredAge", label="Policy owner age:", value=65, min = 18, max = 75),
-          numericInput(inputId="Predq", label="Policy duration in quarters:", value=14, min = 1, max = 48),
-          numericInput(inputId="PredBB", label="Benefit base:", 
-            min = 1000, max = 10000000, value = 100000, step = 1000),
-          numericInput(inputId="PredAV", label="Account value:", 
-            min = 1000, max = 4000000, value = 100000, step = 1000)
-        ),
-        mainPanel(
-          tableOutput("PredDf"),
-          plotOutput("PredBarplot")
-        )
-      )
-    ),
     tabPanel(title = "Explore Data",
       tabsetPanel(type = "tabs", 
         tabPanel("Distribution Plots", 
@@ -123,6 +59,70 @@ shinyUI(
             )
           )
         ) 
+      )
+    ),
+    tabPanel(title = "Explore Models",
+      navlistPanel(
+        "Model Hierarchy",
+        tabPanel("Best model (includes interactions)",
+          plotOutput("BestTornado"),
+          DT::dataTableOutput("BestModSum")
+        ),
+        tabPanel("Best model without interactions",
+          plotOutput("BetterTornado"),
+          DT::dataTableOutput("BetterModSum")
+        ),
+        tabPanel("Baseline model",
+          plotOutput("BaseTornado"),
+          DT::dataTableOutput("BaseModSum")
+        )
+      )
+    ),
+    tabPanel(title = "Explore Results",
+      tabsetPanel(type = "tabs", 
+        tabPanel("A/E Analysis", 
+          sidebarLayout(
+            sidebarPanel(
+              radioButtons("AEvar", "Variables:",varList,selected="q"),
+              radioButtons("AEmodel", "Models:",ModelList),
+              checkboxInput('AEcheck', 'Actual and Expected')
+              ),
+              mainPanel(
+                plotOutput("AEPlot")
+              )
+            )
+          ), 
+        tabPanel("Lift Plots", 
+          sidebarLayout(
+            sidebarPanel(
+              radioButtons("LiftModell", "Model 1:",ModelList),
+              radioButtons("LiftModel2", "Model 2:",ModelList,selected="Baseline Model")
+            ),
+            mainPanel(
+              plotOutput("LiftPlot")
+            )
+          )
+        ) 
+      )
+    ),
+    tabPanel(title = "Predict",
+      sidebarLayout(
+        sidebarPanel(
+          radioButtons("PredSCPeriod", "Surrender charge period:",
+            c("4 years"=4, "7 years"=7),selected="7"),
+          radioButtons("PredRiderCode", "Rider code:",
+            c("A", "B","C"),selected="C"),
+          numericInput(inputId="PredAge", label="Policy owner age:", value=65, min = 18, max = 75),
+          numericInput(inputId="Predq", label="Policy duration in quarters:", value=14, min = 1, max = 48),
+          numericInput(inputId="PredBB", label="Benefit base:", 
+            min = 1000, max = 10000000, value = 100000, step = 1000),
+          numericInput(inputId="PredAV", label="Account value:", 
+            min = 1000, max = 4000000, value = 100000, step = 1000)
+        ),
+        mainPanel(
+          tableOutput("PredDf"),
+          plotOutput("PredBarplot")
+        )
       )
     )
   )
