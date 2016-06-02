@@ -13,7 +13,7 @@ charcoal <- rgb(57,65,77, maxColorValue = max.col)
 slate    <- rgb(198,201,202, maxColorValue = max.col)
 cols     <- c(green, blue, charcoal, slate)
 
-shinyServer(function(input, output) {
+shinyServer(function(input, output, session) {
   
   # update ui
   updateUI<-function(var) {
@@ -29,6 +29,27 @@ shinyServer(function(input, output) {
       })
     }
   }
+  
+  # update ui
+  updateRadio<-function(selected) {
+    selected2 <- input$LiftModell
+    options2 <- ModelList[!(selected == ModelList)]
+    selected.index <- ModelList[which(ModelList == selected2)]
+    if(selected.index > 1) {
+        updateRadioButtons(session, 'LiftModel2', label = "2nd Model:", choices = options2, selected = options2[1])
+    } else {
+        updateRadioButtons(session, 'LiftModel2', label = "2nd Model:", choices = options2, selected = options2[2])
+    }
+  }
+  
+  # update ui
+  observe({
+    
+    selected1 <- input$LiftModell
+    
+    updateRadio(selected1)
+    
+  })
   
   observe({
     output$show_density<-updateUI(input$var)
@@ -101,7 +122,7 @@ shinyServer(function(input, output) {
       xvar = input$AEvar, 
       AandE = AandE)
   })
-
+  
   # Two Way Lift Plot  
   output$LiftPlot <- renderPlot({
     mod1 <- switch(which(input$LiftModell == ModelList),"best.model","better.model","base.model")
