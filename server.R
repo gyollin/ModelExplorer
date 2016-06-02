@@ -36,9 +36,9 @@ shinyServer(function(input, output, session) {
     options2 <- ModelList[!(selected == ModelList)]
     selected.index <- ModelList[which(ModelList == selected2)]
     if(selected.index > 1) {
-        updateRadioButtons(session, 'LiftModel2', label = "2nd Model:", choices = options2, selected = options2[1])
+        updateRadioButtons(session, 'LiftModel2', label = "Model 2:", choices = options2, selected = options2[2])
     } else {
-        updateRadioButtons(session, 'LiftModel2', label = "2nd Model:", choices = options2, selected = options2[2])
+        updateRadioButtons(session, 'LiftModel2', label = "Model 2:", choices = options2, selected = options2[2])
     }
   }
   
