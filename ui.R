@@ -10,6 +10,7 @@ library(shiny)
 shinyUI(
 
   navbarPage(title = "Milliman Preditive Model Explorer",
+    theme = "flatly.css",
     tabPanel(title = "Overview",
       h1("GLWB Lapse Model Explorer"),
       h2("Background"),
