@@ -43,18 +43,17 @@ shinyUI(
             )
           )
         ), 
-        tabPanel("Scatter Plots", 
+        tabPanel("Joint distributions", 
           sidebarLayout(
             sidebarPanel(
-              selectInput("var1", "X-axis:",varListMinS),
-              selectInput("var2", "Y-axis:",varListMinS,selected="ITM"),
+              selectInput("var1", "X-axis:",varListMinS,selected="ITM"),
+              selectInput("var2", "Y-axis:",varListMinS,selected="BB"),
               helpText("Chose two variables to explore their relationship to each other.")
             ),
             
             # Show a tabset that includes a plot, summary, and table view
             # of the generated distribution
             mainPanel(
-              h4("Scatter Plot"),
               plotOutput("ScatterPlot")
             )
           )

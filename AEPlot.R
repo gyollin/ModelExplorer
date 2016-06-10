@@ -21,7 +21,7 @@
 #EffState - factor: if factor then sort
 
 
-AEPlot <- function(model = NULL, data.hld = NULL, xvar = NULL, hold = FALSE, color = "red",
+AEPlot <- function(model = NULL, data.hld = NULL, xvar = NULL, hold = FALSE, color = "firebrick2",
                    use.probs = FALSE, probs = NULL, filter = NULL, sampladj = 0, downscale = 1,
                    AandE = "FALSE"){
   # Capture data types in dataset and of variable to be modeled along x-axis
