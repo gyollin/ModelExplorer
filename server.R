@@ -225,7 +225,7 @@ shinyServer(function(input, output, session) {
     data()
   },include.rownames=FALSE)
   output$PredBarplot <- renderPlot({
-    barplot(height=data()[,"Probability"],names.arg=data()[,"Model"])
+    barplot(height=data()[,"Probability"],names.arg=data()[,"Model"],col=cols)
   })
   
 })
