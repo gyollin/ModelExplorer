@@ -55,7 +55,8 @@ shinyUI(
             # Show a tabset that includes a plot, summary, and table view
             # of the generated distribution
             mainPanel(
-              plotOutput("ScatterPlot")
+              plotOutput("ScatterPlot"),
+              conditionalPanel(condition="$('html').hasClass('shiny-busy')",tags$h5("Shiny seems busy..."))
             )
           )
         ) 
